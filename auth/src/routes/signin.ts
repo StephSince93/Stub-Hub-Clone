@@ -40,7 +40,7 @@ router.post('/api/users/signin',
             id: existingUser.id,
             email: existingUser.email
             }, 
-            process.env.JTW_KEY! // ! makes typescript error go away
+            process.env.JWT_KEY! // ! makes typescript error go away
         )
 
         // Store it on the session object
