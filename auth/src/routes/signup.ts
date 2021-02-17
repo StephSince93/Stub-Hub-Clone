@@ -1,14 +1,15 @@
 import express, { Request, Response }  from 'express'
-import { body, validationResult } from 'express-validator'
+import { body } from 'express-validator'
 import jwt from 'jsonwebtoken'
 
 import { validateRequest } from '../middlewares/validate-request'
 import { User } from '../models/user'
-import { RequestValidationError } from '../errors/request-validation-error'
 import { BadRequestError } from '../errors/bad-request-error'
+
 const router = express.Router()
 
-router.post('/api/users/signup', 
+router.post(
+    '/api/users/signup', 
     [
     body('email')
      .isEmail()
@@ -22,24 +23,22 @@ router.post('/api/users/signup',
     async (req: Request, res: Response) => {
 
         const { email, password } = req.body
-
         const existingUser = await User.findOne({email})
 
         if(existingUser) {
             throw new BadRequestError('Email in use')
         }
 
-        const user = User.build({ email, password})
-        await user.save()
+       const user = User.build({ email, password })
 
+        await user.save()
         // Generate JWT
         const userJWT = jwt.sign({
-            id: user.id,
+           id: user._id,
             email: user.email
-            }, 
-            process.env.JTW_KEY! // ! makes typescript error go away
+            },
+           process.env.JWT_KEY! // ! makes typescript error go away
         )
-
         // Store it on the session object
         req.session = {
             jwt: userJWT
