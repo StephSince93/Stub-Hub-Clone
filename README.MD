@@ -9,3 +9,5 @@ Run - skaffold Dev
 - Kubernetes Secret ENV Variables command: kubectl create secret generic jwt-secret --from-literal='Name of variable'='Name of secret'
 
 - Kubernetes get secrets command: kubectl get secrets
+
+- Kubernetes get last deployment: kubectl get deployment -o yaml
